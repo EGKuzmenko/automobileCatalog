@@ -1,7 +1,11 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Storage {
+public class Storage implements Serializable {
+
+    private static final long serialVersionUID = 14L;
+
 
     private List<Car> listOfCars;
 
@@ -23,7 +27,7 @@ public class Storage {
 
     public String showCars() {
         StringBuilder sb = new StringBuilder();
-        int i = 0;
+        int i = 1;
         for (final Car cars : listOfCars) {
             sb.append(String.format("%d: ", i))
                     .append(cars.toString())
@@ -38,7 +42,7 @@ public class Storage {
         return listOfCars.get(i).toString();
     }
 
-    public void editYear(final int index, final int newYear) {
+    public void editYear(final int index, final String newYear) {
         listOfCars.get(index).setYear(newYear);
     }
 
