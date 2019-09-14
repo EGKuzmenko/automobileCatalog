@@ -1,6 +1,10 @@
-public class Car {
+import java.io.Serializable;
 
-    private Integer year;
+public class Car implements Serializable {
+
+    private static final long serialVersionUID = 14L;
+
+    private String year;
 
     private String manufacturer;
 
@@ -8,7 +12,7 @@ public class Car {
 
     private String bodyType;
 
-    public Car(final Integer year, final String manufacturer, final String model, final String bodyType) {
+    public Car(final String year, final String manufacturer, final String model, final String bodyType) {
         this.year = year;
         this.manufacturer = manufacturer;
         this.model = model;
@@ -22,11 +26,11 @@ public class Car {
         this.bodyType = null;
     }
 
-    public Integer getYear() {
+    public String getYear() {
         return this.year;
     }
 
-    public void setYear(final Integer year) {
+    public void setYear(final String year) {
         this.year = year;
     }
 
@@ -72,7 +76,8 @@ public class Car {
         sb.append(String.format("%s ", this.getManufacturer()))
                 .append(String.format("%s, ", this.getModel()))
                 .append(String.format("%s, ", this.getBodyType()))
-                .append(String.format("%d", this.getYear()));
+                .append(String.format("%s", this.getYear()));
+
         return sb.toString();
     }
 }
