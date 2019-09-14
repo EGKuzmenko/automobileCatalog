@@ -1,4 +1,3 @@
-import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Console {
@@ -28,6 +27,9 @@ public class Console {
                 case ("remove"):
                     remove();
                     break;
+                case ("edit"):
+                    edit();
+                    break;
                 case ("exit"):
                     statement = false;
                     break;
@@ -37,34 +39,35 @@ public class Console {
         }
     }
 
-    private void clear() {
-        System.out.flush();
-    }
-
     private String readCommand() {
         Scanner in = new Scanner(System.in);
         String inputString = in.nextLine();
 
-        return inputString;
+        return inputString.toLowerCase().trim();
+    }
+
+    public String readString() {
+        Scanner in = new Scanner(System.in);
+        String inputString = in.nextLine();
+
+        return inputString.trim();
     }
 
     private void add() {
         System.out.println("Введите данные для автомобиля");
-
         Car newCar = new Car();
-        Scanner in = new Scanner(System.in);
 
         System.out.print("Производитель : ");
-        newCar.setManufacturer(in.nextLine());
+        newCar.setManufacturer(this.readString());
 
         System.out.print("Модель : ");
-        newCar.setModel(in.nextLine());
+        newCar.setModel(this.readString());
 
         System.out.print("Тип кузова : ");
-        newCar.setBodyType(in.nextLine());
+        newCar.setBodyType(this.readString());
 
         System.out.print("Год : ");
-        newCar.setYear(in.nextInt());
+        newCar.setYear(this.readString());
 
         carStorage.addCar(newCar);
     }
@@ -76,7 +79,7 @@ public class Console {
     private void remove() {
         System.out.print("Введите номер автомоблия, который нужно удалить: ");
         int i = Integer.parseInt(readCommand());
-        carStorage.remove(i);
+        carStorage.remove(i - 1);
         System.out.print(carStorage.showCars());
     }
 
@@ -90,35 +93,26 @@ public class Console {
                 .append("\"help\" - показать справку");
         System.out.println(sb.toString());
     }
-//
-//    private void edit() {
-//        Scanner in = new Scanner(System.in);
-//        System.out.print("Введите номер автомобиля, который нужно отредактировать : ");
-//        int index = in.nextInt();
-//        Car car = carStorage.getCar(index);
-//        System.out.print("Отредактировать всю запись?\nВведите \"да\" / \"нет\"");
-//        if (in.nextLine().equals("да")) {
-//
-//            System.out.print("Новый производитель : ");
-//            car.setManufacturer(in.nextLine());
-//
-//            System.out.print("Новая одель : ");
-//            car.setModel(in.nextLine());
-//
-//            System.out.print("Новый тип кузова : ");
-//            car.setBodyType(in.nextLine());
-//
-//            System.out.print("Новый год : ");
-//            car.setYear(in.nextInt());
-//        } else {
-//            System.out.println("Что бы вы хотели изменить?");
-//            System.out.printf("1 - %s\n2 - %s\n3 - %s\n4 - %s\n:", "Производитель", "Модель", "Тип кузова", "Год");
-//            switch (in.nextInt()) {
-//                case (1):
-//                    car.setManufacturer(in.nextLine());
-//            }
-//        }
-//    }
 
+    private void edit() {
+        System.out.print("Выберите автомобиль по номеру в списке : ");
+        final int index = Integer.parseInt(readCommand());
+        final Car car = carStorage.getCar(index - 1);
 
+        System.out.printf("Производитель : %s. Изменить?(Введите \"да\"/\"нет\")", car.getManufacturer());
+        if (readCommand().equals("да"))
+            car.setManufacturer(readString());
+
+        System.out.printf("Модель : %s. Изменить?(Введите \"да\"/\"нет\")", car.getModel());
+        if (readCommand().equals("да"))
+            car.setModel(readString());
+
+        System.out.printf("Типа кузова : %s. Изменить?(Введите \"да\"/\"нет\")", car.getBodyType());
+        if (readCommand().equals("да"))
+            car.setBodyType(readString());
+
+        System.out.printf("Год : %s. Изменить?(Введите \"да\"/\"нет\")", car.getYear());
+        if (readCommand().equals("да"))
+            car.setYear(readString());
+    }
 }
