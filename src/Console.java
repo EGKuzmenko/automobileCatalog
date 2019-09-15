@@ -14,8 +14,8 @@ public class Console {
     }
 
     private void parseCommand() {
-        boolean statement = true;
-        while (statement) {
+        boolean state = true;
+        while (state) {
             System.out.print("\nВведите команду --> ");
             String str = readCommand();
             switch (str) {
@@ -35,10 +35,10 @@ public class Console {
                     edit();
                     break;
                 case ("exit"):
-                    statement = false;
+                    state = false;
                     break;
                     default:
-                        System.out.println("Неправлиьная комманда");
+                        System.out.println("Команда введена неверно");
             }
         }
     }
@@ -100,7 +100,7 @@ public class Console {
             return false;
         }
         this.show();
-        System.out.print("Введите номер автомоблия, который нужно удалить: ");
+        System.out.print("Введите номер автомобиля, который нужно удалить: ");
 
         try {
             int i = Integer.parseInt(readCommand());
@@ -160,7 +160,7 @@ public class Console {
                     car.setModel(readString());
                 }
 
-                System.out.printf("Типа кузова : %s. Изменить?(\"да\" для изменения) : ", car.getBodyType());
+                System.out.printf("Тип кузова : %s. Изменить?(\"да\" для изменения) : ", car.getBodyType());
                 if (readCommand().equals("да")) {
                     System.out.print("\nВведите тип кузова --> ");
                     car.setBodyType(readString());
@@ -177,7 +177,7 @@ public class Console {
                 }
 
             } catch (IndexOutOfBoundsException ex) {
-                System.out.printf("Автомобиля под номером %d не сущетсвует\n", index);
+                System.out.printf("Автомобиля под номером %d не существует\n", index);
             }
 
         } catch (NumberFormatException ex) {
