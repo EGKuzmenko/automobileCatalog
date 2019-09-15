@@ -1,3 +1,6 @@
+import Exceptions.InvalidYearException;
+
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Console {
@@ -6,13 +9,14 @@ public class Console {
 
     public Console(final Storage carStorage) {
         this.carStorage = carStorage;
-        help();
+        startMenu();
         parseCommand();
     }
 
     private void parseCommand() {
         boolean statement = true;
         while (statement) {
+            System.out.print("\nВведите команду --> ");
             String str = readCommand();
             switch (str) {
                 case ("help"):
@@ -39,6 +43,11 @@ public class Console {
         }
     }
 
+    private void startMenu() {
+        System.out.println("Автомобильный справочник");
+        System.out.println("Для вызова справки введите \"help\"");
+    }
+
     private String readCommand() {
         Scanner in = new Scanner(System.in);
         String inputString = in.nextLine();
@@ -46,7 +55,7 @@ public class Console {
         return inputString.toLowerCase().trim();
     }
 
-    public String readString() {
+    private String readString() {
         Scanner in = new Scanner(System.in);
         String inputString = in.nextLine();
 
@@ -67,52 +76,118 @@ public class Console {
         newCar.setBodyType(this.readString());
 
         System.out.print("Год : ");
-        newCar.setYear(this.readString());
+        try {
+            newCar.setYear(this.readString());
+        } catch (InvalidYearException | NumberFormatException | NullPointerException ex) {
+            System.out.print("Год введен неверно");
+        }
 
         carStorage.addCar(newCar);
+        try {
+            FileReaderWriter.writeFile(carStorage);
+        } catch (IOException e) {}
     }
 
     private void show() {
+        if (carStorage.isEmpty())
+            System.out.print("Справочник пуст\n");
         System.out.print(carStorage.showCars());
     }
 
-    private void remove() {
+    private boolean remove() {
+        if (carStorage.isEmpty()) {
+            this.show();
+            return false;
+        }
+        this.show();
         System.out.print("Введите номер автомоблия, который нужно удалить: ");
-        int i = Integer.parseInt(readCommand());
-        carStorage.remove(i - 1);
-        System.out.print(carStorage.showCars());
+
+        try {
+            int i = Integer.parseInt(readCommand());
+
+            try {
+                carStorage.remove(i - 1);
+            } catch (IndexOutOfBoundsException ex) {
+                System.out.printf("\nАвтомобиля под номером %d не сущетсвует\n", i);
+            }
+
+        } catch (NumberFormatException ex) {
+            System.out.println("Необходимо ввести число");
+        }
+
+        try {
+            FileReaderWriter.writeFile(carStorage);
+        } catch (IOException e) {}
+        return true;
     }
 
     private void help() {
         StringBuilder sb = new StringBuilder();
-        System.out.println("Справка");
+        System.out.println("Список доступных команд");
         sb.append("\"add\" - добавить новый автомобиль\n")
                 .append("\"remove\" - удалить автомобиль из списка\n")
+                .append("\"edit\" - редактировать автомобиль\n")
                 .append("\"show\" - показать все автомобили, внесенные в справочник\n")
                 .append("\"exit\" - выйти из программы\n")
-                .append("\"help\" - показать справку");
+                .append("\"help\" - показать список команд");
         System.out.println(sb.toString());
     }
 
-    private void edit() {
+    private boolean edit() {
+        if (carStorage.isEmpty()) {
+            this.show();
+            return false;
+        }
+        this.show();
         System.out.print("Выберите автомобиль по номеру в списке : ");
-        final int index = Integer.parseInt(readCommand());
-        final Car car = carStorage.getCar(index - 1);
 
-        System.out.printf("Производитель : %s. Изменить?(Введите \"да\"/\"нет\")", car.getManufacturer());
-        if (readCommand().equals("да"))
-            car.setManufacturer(readString());
+        try {
 
-        System.out.printf("Модель : %s. Изменить?(Введите \"да\"/\"нет\")", car.getModel());
-        if (readCommand().equals("да"))
-            car.setModel(readString());
+            final int index = Integer.parseInt(readCommand());
 
-        System.out.printf("Типа кузова : %s. Изменить?(Введите \"да\"/\"нет\")", car.getBodyType());
-        if (readCommand().equals("да"))
-            car.setBodyType(readString());
+            try {
 
-        System.out.printf("Год : %s. Изменить?(Введите \"да\"/\"нет\")", car.getYear());
-        if (readCommand().equals("да"))
-            car.setYear(readString());
+                final Car car = carStorage.getCar(index - 1);
+                System.out.printf("Производитель : %s. Изменить?(\"да\" для изменения) : ", car.getManufacturer());
+                if (readCommand().equals("да")) {
+                    System.out.print("\nВведите производителя --> ");
+                    car.setManufacturer(readString());
+                }
+
+                System.out.printf("Модель : %s. Изменить?(\"да\" для изменения) : ", car.getModel());
+                if (readCommand().equals("да")) {
+                    System.out.print("\nВведите модель --> ");
+                    car.setModel(readString());
+                }
+
+                System.out.printf("Типа кузова : %s. Изменить?(\"да\" для изменения) : ", car.getBodyType());
+                if (readCommand().equals("да")) {
+                    System.out.print("\nВведите тип кузова --> ");
+                    car.setBodyType(readString());
+                }
+
+                System.out.printf("Год : %s. Изменить?(\"да\" для изменения) : ", car.getYear());
+                if (readCommand().equals("да")) {
+                    System.out.print("\nВведите год --> ");
+                    try {
+                        car.setYear(readString());
+                    } catch (InvalidYearException | NumberFormatException ex) {
+                        System.out.println("Год введен неверно");
+                    }
+                }
+
+            } catch (IndexOutOfBoundsException ex) {
+                System.out.printf("Автомобиля под номером %d не сущетсвует\n", index);
+            }
+
+        } catch (NumberFormatException ex) {
+            System.out.println("Необходимо ввести число");
+        }
+
+        try {
+            FileReaderWriter.writeFile(carStorage);
+        } catch (IOException e) {}
+
+        return true;
     }
 }

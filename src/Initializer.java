@@ -12,7 +12,7 @@ public class Initializer {
         Storage carStorage = new Storage();
 
         carStorage.addCar(new Car("2010", "Suzuki", "Grand Vitara", "SUV"));
-        carStorage.addCar(new Car("2008", "Tayota", "Camry", "Sedan"));
+        carStorage.addCar(new Car("2008", "Toyota", "Camry", "Sedan"));
         carStorage.addCar(new Car("2019", "Tesla", "Model Y", "Crossover"));
 
         try {
