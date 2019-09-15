@@ -1,5 +1,6 @@
 import java.io.*;
 
+//Сериализация и десериализация
 public class FileReaderWriter {
 
     public static void writeFile(final Storage carStorage) throws IOException {

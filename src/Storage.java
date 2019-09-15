@@ -2,10 +2,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+//Класс Storage хранит ArrayList с автомобилями
 public class Storage implements Serializable {
 
     private static final long serialVersionUID = 14L;
-
 
     private List<Car> listOfCars;
 

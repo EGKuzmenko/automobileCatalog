@@ -13,6 +13,7 @@ public class Console {
         parseCommand();
     }
 
+    //Чтение команды из консоли
     private void parseCommand() {
         boolean state = true;
         while (state) {
@@ -48,6 +49,8 @@ public class Console {
         System.out.println("Для вызова справки введите \"help\"");
     }
 
+    //Метод используется для обработки команд, которуые написал пользователь,
+    //приводя их к нижнему регистру и убирая лишние пробелы
     private String readCommand() {
         Scanner in = new Scanner(System.in);
         String inputString = in.nextLine();
@@ -55,6 +58,7 @@ public class Console {
         return inputString.toLowerCase().trim();
     }
 
+    //Метод используется для записи данных для автомобилей
     private String readString() {
         Scanner in = new Scanner(System.in);
         String inputString = in.nextLine();
