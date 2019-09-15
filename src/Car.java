@@ -1,3 +1,5 @@
+import Exceptions.InvalidYearException;
+
 import java.io.Serializable;
 
 public class Car implements Serializable {
@@ -30,7 +32,11 @@ public class Car implements Serializable {
         return this.year;
     }
 
-    public void setYear(final String year) {
+    public void setYear(final String year) throws NumberFormatException, InvalidYearException {
+        int validYear = Integer.parseInt(year);
+        if (validYear < 1806 || validYear > 2019) {
+            throw new InvalidYearException();
+        }
         this.year = year;
     }
 
